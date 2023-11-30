@@ -31,6 +31,14 @@ def run():
         response = stub.ListAllEmployees(EmployeeService_pb2.EmptyMessage())
         print ('All employees: ' + str(response))
 
+        # Get the employees salary mean
+        response = stub.GetEmployeeSalaryMean(EmployeeService_pb2.EmptyMessage())
+        print ('Salary mean: ' + str(response))
+
+        # Raise employees salary by a percentage
+        response = stub.RaiseEmployeeSalaryByPercentage(EmployeeService_pb2.EmployeeSalaryRaise(percentage=100))
+        print ('Raised all salaries: ' + response.status)
+
 if __name__ == '__main__':
     logging.basicConfig()
     run()

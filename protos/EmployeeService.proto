@@ -18,7 +18,10 @@ service EmployeeService {
   rpc DeleteEmployee (EmployeeID) returns (StatusReply) {}
   // List all employees
   rpc ListAllEmployees (EmptyMessage) returns (EmployeeDataList) {}
-  
+  // Get all employees salary mean
+  rpc GetEmployeeSalaryMean (EmptyMessage) returns (EmployeeSalaryMean) {}
+  // Update the salary of the employees raising by a percentage
+  rpc RaiseEmployeeSalaryByPercentage (EmployeeSalaryRaise) returns (StatusReply) {}
 }
 
 message EmployeeData {
@@ -38,6 +41,14 @@ message EmployeeID {
 message EmployeeTitleUpdate {
   uint32 id = 1;
   string title = 2;
+}
+
+message EmployeeSalaryMean {
+  float salaryMean = 1;
+}
+
+message EmployeeSalaryRaise {
+  float percentage = 1;
 }
 
 message EmptyMessage{}

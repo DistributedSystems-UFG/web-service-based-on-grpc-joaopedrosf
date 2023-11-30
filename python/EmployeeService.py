@@ -11,12 +11,14 @@ empDB=[
  {
  'id':101,
  'name':'Saravanan S',
- 'title':'Technical Leader'
+ 'title':'Technical Leader',
+ 'salary': 2000.0
  },
  {
  'id':201,
  'name':'Rajkumar P',
- 'title':'Sr Software Engineer'
+ 'title':'Sr Software Engineer',
+ 'salary': 1000.0
  }
  ]
 
@@ -26,7 +28,8 @@ class EmployeeServer(EmployeeService_pb2_grpc.EmployeeServiceServicer):
     dat = {
     'id':request.id,
     'name':request.name,
-    'title':request.title
+    'title':request.title,
+    'salary': 3000.0
     }
     empDB.append(dat)
     return EmployeeService_pb2.StatusReply(status='OK')
@@ -54,6 +57,17 @@ class EmployeeServer(EmployeeService_pb2_grpc.EmployeeServiceServicer):
       emp_data = EmployeeService_pb2.EmployeeData(id=item['id'], name=item['name'], title=item['title']) 
       list.employee_data.append(emp_data)
     return list
+  
+  def GetEmployeeSalaryMean(self, request, context):
+    salaries = list(map(lambda x: float(x['salary']), empDB))
+    salaryMean = sum(salaries) / len(salaries)
+    return EmployeeService_pb2.EmployeeSalaryMean(salaryMean=salaryMean)
+
+  def RaiseEmployeeSalaryByPercentage(self, request, context):
+    percentage = request.percentage
+    for emp in empDB:
+        emp['salary'] = str(float(emp['salary']) * (1 + (percentage/100)))
+    return EmployeeService_pb2.StatusReply(status='OK')
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
